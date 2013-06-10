@@ -14,6 +14,7 @@ block.x = window.x
 block.y = window.y
 block.vx = 0
 block.vy = 0
+block.clinging = false
 
 function block:getColor()
     return self.color.r, self.color.g, self.color.b, self.color.a;
@@ -72,8 +73,21 @@ function block:updateVelocity(dt)
         end
     end
 
-    if ((self.x > 496 and self.vx > 0) or (self.x < 280 and self.vx < 0)) then
-        self.vx = 0-self.vx
+    self.clinging = false
+    --test horizontal collision
+    if ((self.x >= 496 and self.vx > 0) or (self.x <= 280 and self.vx < 0)) then
+
+        self.vx = 0
+
+        if (self.x > 496) then
+            self.x = 496
+        end
+
+        if (self.x < 280) then
+            self.x = 280
+        end
+
+        self:cling()
     end
 end
 
@@ -84,8 +98,26 @@ function block:keypressed(key, update)
 end
 
 function block:jump()
+    print("X: " .. self.x .. " vX: " .. self.vx)
     if (self.vy == 0) then
         self.vy = -200
+    end
+
+    if (self.clinging) then
+        self.vy = -200
+
+        if (self.x == 496) then
+            self.vx = -100
+        elseif (self.x == 280) then
+            self.vx = 100
+        else
+        end
+    end
+end
+
+function block:cling()
+    if (love.keyboard.isDown("left") or love.keyboard.isDown("right")) then
+        self.clinging = true
     end
 end
 
