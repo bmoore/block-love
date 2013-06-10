@@ -98,7 +98,6 @@ function block:keypressed(key, update)
 end
 
 function block:jump()
-    print("X: " .. self.x .. " vX: " .. self.vx)
     if (self.vy == 0) then
         self.vy = -200
     end

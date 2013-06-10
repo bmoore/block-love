@@ -1,27 +1,28 @@
+HC = require 'hardoncollider'
+function on_collision()
+end
+
+function collision_stop()
+end
+
 function love.load()
     print("Started")
-    window = {}
-    window.x = 280
-    window.y = 60
-    window.h = 480
-    window.w = 240
+
+    stage = require('stage')
+    window = stage.create(280, 60, 240, 480)
+    Collider = HC(100, on_collision, collision_stop)
     block = require("block")
 end
 
 function love.draw()
     --draw the background
-    love.graphics.setColor(230,230,230,255)
-    love.graphics.rectangle("fill", 280, 60, 240, 480)
+    window:drawBg()
 
     --draw the block
     block:draw()
     
     --draw the stage frame
-    love.graphics.setColor(0,0,0,255)
-    love.graphics.rectangle("fill", 0, 0, 800, 60)
-    love.graphics.rectangle("fill", 0, 540, 800, 60)
-    love.graphics.rectangle("fill", 0, 0, 280, 600)
-    love.graphics.rectangle("fill", 520, 0, 280, 600)
+    window:drawFg()
 end
 
 function love.update(dt)
