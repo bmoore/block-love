@@ -1,5 +1,14 @@
 HC = require 'hardoncollider'
-function on_collision()
+function on_collision(dt, shape_one, shape_two, dx, dy)
+    block:collision(dt, shape_one, shape_two, dx, dy)
+
+    print("dt: " .. dt)
+    print("shape_one: ")
+    print(shape_one)
+    print("shape_two: ")
+    print(shape_two)
+    print("dx: " .. dx)
+    print("dy: " .. dy)
 end
 
 function collision_stop()
@@ -8,10 +17,15 @@ end
 function love.load()
     print("Started")
 
-    stage = require('stage')
-    window = stage.create(280, 60, 240, 480)
     Collider = HC(100, on_collision, collision_stop)
+
+    stage = require('stage')
+    window = stage.create(240, 480)
+    window:load()
+
     block = require("block")
+    block:load()
+
 end
 
 function love.draw()
@@ -28,6 +42,7 @@ end
 function love.update(dt)
     --update the block
     block:update(dt)
+    Collider:update(dt)
 end
 
 function love.focus(f)

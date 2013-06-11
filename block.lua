@@ -2,8 +2,8 @@ local block = {}
 
 block.gravity = 300
 
-block.height = 24
-block.width = 24
+block.h = 24
+block.w = 24
 block.color = {
     r = 130,
     g = 150,
@@ -15,14 +15,39 @@ block.y = window.y
 block.vx = 0
 block.vy = 0
 block.clinging = false
+block.shape = {}
 
 function block:getColor()
     return self.color.r, self.color.g, self.color.b, self.color.a;
 end
 
+function block:load()
+    block.shape = Collider:addRectangle(block.x, block.y, block.w, block.h)
+end
+
+function block:collision(dt, shape_one, shape_two, dx, dy)
+
+    if (self.shape == shape_one) then
+        print('shape one!')
+    elseif (self.shape == shape_two) then
+        print('shape two!')
+    end
+
+    self.x = self.x-dx
+    self.y = self.y-dy
+
+    if (math.abs(dx) > 0.000000001) then
+        self.vx = 0
+    end
+
+    if (math.abs(dy)> 0.000000001) then
+        self.vy = 0
+    end
+end
+
 function block:draw()
     love.graphics.setColor(self:getColor())
-    love.graphics.rectangle("fill", self.x, self.y, self.height, self.width)
+    self.shape:draw('fill')
 end
 
 function block:update(dt)
@@ -37,6 +62,7 @@ function block:updatePosition(dt)
     end
 
     self.x = self.x + (self.vx*dt)
+    self.shape:moveTo(self.x+12, self.y+12)
 end
 
 function block:updateVelocity(dt)

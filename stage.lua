@@ -19,14 +19,28 @@ Stage.frameColor = {
     a = 255
 }
 
-function Stage.create(x,y,w,h)
+Stage.goal = {}
+
+function Stage.create(w,h)
     local new_stage = {}
     setmetatable(new_stage, Stage)
-    new_stage.x = x
-    new_stage.y = y
+    new_stage.x = (love.graphics.getWidth() - w)/2
+    new_stage.y = (love.graphics.getHeight() - h)/2
     new_stage.w = w
     new_stage.h = h
     return new_stage
+end
+
+function Stage:load()
+    self.goal = Collider:addRectangle(300,300,100,10)
+end
+
+function Stage:getBottomY()
+    return self.y+self.h
+end
+
+function Stage:getRightX()
+    return self.x+self.w
 end
 
 function Stage:getColor()
@@ -40,7 +54,6 @@ end
 function Stage:drawBg()    
     love.graphics.setColor(self:getColor())
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
-
 end
 
 function Stage:drawFg()
@@ -50,6 +63,8 @@ function Stage:drawFg()
     love.graphics.rectangle("fill", 0, self.y+self.h, win_w, win_h-self.y-self.h)
     love.graphics.rectangle("fill", 0, 0, win_w-self.x-self.w, win_h)
     love.graphics.rectangle("fill", self.x+self.w, 0, win_w-self.x-self.w, win_h)
+    love.graphics.setColor(180,120,80,150)
+    self.goal:draw("fill")
 end
 
 return Stage
